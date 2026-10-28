@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Configurações</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+
+  <main class="config-pagina">
+    <h1>Configurações</h1>
+    <p>Gerencie sua conta, aparência e privacidade.</p>
+
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Conta</div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>Nome de usuário</label>
+          <span>Como você aparece para os outros</span>
+        </div>
+        <input type="text" id="cfgNome" placeholder="Seu nome">
+        <button class="btn-config-salvar" onclick="salvarNome()">Salvar</button>
+      </div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>E-mail</label>
+          <span>Seu e-mail escolar</span>
+        </div>
+        <input type="email" id="cfgEmail" placeholder="email@escola.com">
+        <button class="btn-config-salvar" onclick="salvarEmail()">Salvar</button>
+      </div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>Senha</label>
+          <span>Altere sua senha de acesso</span>
+        </div>
+        <input type="password" id="cfgSenha" placeholder="Nova senha">
+        <button class="btn-config-salvar" onclick="salvarSenha()">Salvar</button>
+      </div>
+    </div>
+
+    <!-- APARÊNCIA -->
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Aparência</div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>Modo claro</label>
+          <span>Alterna entre tema claro e escuro</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleTema" onchange="toggleTheme()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="config-item" style="flex-wrap:wrap">
+        <div class="config-item-info">
+          <label>Paleta de cores</label>
+          <span>Escolha o conjunto de cores do Loom</span>
+        </div>
+        <div class="paletas" id="listaPaletas" style="width:100%"></div>
+      </div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>Tamanho da fonte</label>
+          <span>Ajuste o tamanho do texto</span>
+        </div>
+        <select id="cfgFonte" onchange="ajustarFonte(this.value)">
+          <option value="13">Pequena</option>
+          <option value="15">Normal</option>
+          <option value="17">Grande</option>
+          <option value="19">Muito grande</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- NOTIFICAÇÕES -->
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Notificações</div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label for="notifSeguidores">Novos seguidores</label>
+          <span>Avisa quando alguém te seguir</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="notifSeguidores" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label for="notifFeed">Atividade no feed</label>
+          <span>Curtidas e comentários nas suas postagens</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="notifFeed" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- PRIVACIDADE -->
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Privacidade</div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label for="mostrarOnline">Mostrar status online</label>
+          <span>Exibe quando você está ativo</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="mostrarOnline" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label for="mostrarViews">Mostrar visualizações</label>
+          <span>Exibe o contador de visitas no perfil</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="mostrarViews" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Meus Links</div>
+
+      <div id="listaLinksConfig"></div>
+
+      <div class="config-item" style="border-top: 1px solid var(--border);">
+        <div class="config-item-info">
+          <label>Adicionar novo link</label>
+          <span>Máximo de 6 links no perfil</span>
+        </div>
+        <button class="btn-config-salvar" onclick="adicionarLink()">+ Adicionar</button>
+        <button class="btn-config-salvar" onclick="salvarLinks()">Salvar links</button>
+      </div>
+    </div>
+
+    <!-- SESSÃO -->
+    <div class="config-secao">
+      <div class="config-secao-titulo"> Sessão</div>
+
+      <div class="config-item">
+        <div class="config-item-info">
+          <label>Sair da conta</label>
+          <span>Você será redirecionado para a tela de login</span>
+        </div>
+        <button class="btn-config-perigo" onclick="sairDaConta()">Sair</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <p>© 2026 Loom — Projeto escolar</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    loomPronto.then(async () => {
+      document.getElementById("cfgNome").value = EU.nome;
+      document.getElementById("cfgEmail").value = EU.email || "";
+      document.getElementById("toggleTema").checked = document.body.classList.contains("light");
+      document.getElementById("cfgFonte").value = String(PREFS.fonte || localStorage.getItem("wrmFonte") || "15");
+      (await getLinks(EU.id)).forEach(u => adicionarLink(u));
+
+      document.getElementById("mostrarOnline").checked = EU.mostrar_online;
+      document.getElementById("mostrarViews").checked = EU.mostrar_views;
+      document.getElementById("notifSeguidores").checked = PREFS.notif_seguidores !== false;
+      document.getElementById("notifFeed").checked = PREFS.notif_feed !== false;
+
+      const ligar = (id, salvar) => document.getElementById(id).addEventListener("change", async e => {
+        await salvar(e.target.checked);
+        showToast("Preferência salva!", "success");
+      });
+      ligar("mostrarOnline", async v => { if (await atualizarPerfil({ mostrar_online: v })) EU.mostrar_online = v; });
+      ligar("mostrarViews",  async v => { if (await atualizarPerfil({ mostrar_views: v })) EU.mostrar_views = v; });
+      ligar("notifSeguidores", v => salvarPref({ notif_seguidores: v }));
+      ligar("notifFeed",       v => salvarPref({ notif_feed: v }));
+    });
+
+    async function salvarNome() {
+      const val = document.getElementById("cfgNome").value.trim();
+      if (val.length < 2) { showToast("Digite um nome!", "error"); return; }
+      if (!(await atualizarPerfil({ nome: val }))) { showToast("Não foi possível salvar.", "error"); return; }
+      EU.nome = val; initApp();
+      showToast("Nome atualizado!", "success");
+    }
+    async function salvarEmail() {
+      const val = document.getElementById("cfgEmail").value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { showToast("Digite um e-mail válido!", "error"); return; }
+      const { error } = await sb.auth.updateUser({ email: val });
+      if (error) { showToast(mensagemErroAuth(error), "error"); return; }
+      showToast("Enviamos um link de confirmação para o novo e-mail.", "success");
+    }
+    async function salvarSenha() {
+      const val = document.getElementById("cfgSenha").value;
+      if (val.length < 6) { showToast("Senha muito curta!", "error"); return; }
+      const { error } = await sb.auth.updateUser({ password: val });
+      if (error) { showToast(mensagemErroAuth(error), "error"); return; }
+      showToast("Senha alterada!", "success");
+      document.getElementById("cfgSenha").value = "";
+    }
+    function ajustarFonte(tamanho) { aplicarFonte(tamanho, true); }
+
+    function adicionarLink(valor = "") {
+      const lista = document.getElementById("listaLinksConfig");
+      if (lista.querySelectorAll(".config-link-item").length >= 6) { showToast("Máximo de 6 links!", "error"); return; }
+      const div = document.createElement("div");
+      div.className = "config-link-item";
+      div.innerHTML = `
+        <span class="emoji">🔗</span>
+        <input type="text" placeholder="Cole seu link aqui">
+        <button class="btn-remover-link" onclick="removerLink(this)">✕</button>`;
+      div.querySelector("input").value = typeof valor === "string" ? valor : "";
+      if (typeof valor === "string" && valor) div.querySelector(".emoji").textContent = infoLink(valor).emoji;
+      lista.appendChild(div);
+    }
+    async function salvarLinks() {
+      const urls = [...document.querySelectorAll("#listaLinksConfig input")].map(i => urlSegura(i.value)).filter(Boolean);
+      if (await setLinks([...new Set(urls)].slice(0, 6))) showToast("Links salvos!", "success");
+      else showToast("Não foi possível salvar os links.", "error");
+    }
+    function removerLink(btn) { btn.closest(".config-link-item").remove(); showToast("Link removido.", ""); }
+  </script>
+</body>
+</html>

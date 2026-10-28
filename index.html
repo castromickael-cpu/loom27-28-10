@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Rede Social Escolar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="home-body">
+
+  <main class="home-container">
+    <div class="logo-home">Loom</div>
+    <p class="home-tagline">Rede Social Escolar</p>
+
+    <p class="home-texto">
+      Conecte-se com alunos, explore perfis, compartilhe ideias e reúna todas as suas redes em um só lugar.
+    </p>
+
+    <form class="garantir" onsubmit="garantirUsuario(event)">
+      <span>loom/@</span>
+      <input type="text" id="garantirUser" placeholder="seuusuario" maxlength="20" required autocomplete="off">
+      <button type="submit">Garantir</button>
+    </form>
+
+    <div class="home-botoes">
+      <a href="login.html" class="btn-home btn-home-principal">Entrar</a>
+      <a href="cadastro.html" class="btn-home btn-home-secundario">Criar conta</a>
+      <a href="inicio.html" class="btn-home btn-home-secundario">Explorar</a>
+    </div>
+
+    <div class="home-stats">
+      <div class="home-stat">
+        <strong>400+</strong>
+        <span>Alunos</span>
+      </div>
+      <div class="home-stat">
+        <strong>12</strong>
+        <span>Turmas</span>
+      </div>
+      <div class="home-stat">
+        <strong>2026</strong>
+        <span>Ano letivo</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

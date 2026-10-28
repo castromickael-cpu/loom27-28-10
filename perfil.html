@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Perfil</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <style>
+
+    /* SEGUINDO */
+    .seguir-section {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn-seguir-perfil {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 11px 28px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-display);
+    }
+    .btn-seguir-perfil:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(90,123,141,0.3);
+    }
+    .btn-seguir-perfil.seguindo {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+    .btn-seguir-perfil.seguindo:hover {
+      background: rgba(248,113,113,0.2);
+      border-color: rgba(248,113,113,0.4);
+      color: #f87171;
+    }
+
+    /* MODAL SEGUIDORES/SEGUINDO */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      width: 320px;
+      max-width: 90%;
+      box-shadow: var(--shadow);
+      animation: fadeInUp 0.25s ease;
+    }
+    .modal-box h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text-primary);
+    }
+    .modal-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--transition);
+      border-radius: var(--radius-sm);
+    }
+    .modal-user:hover { opacity: 0.75; }
+    .modal-user:last-of-type { border-bottom: none; }
+    .modal-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 2px solid rgba(90,123,141,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+    .modal-nome { font-weight: 700; font-size: 14px; color: var(--text-primary); }
+    .modal-turma { font-size: 12px; color: var(--text-muted); }
+    .modal-fechar {
+      width: 100%;
+      margin-top: 18px;
+      padding: 11px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+    }
+    .modal-fechar:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* Info boxes clicáveis */
+    .info-box.clicavel { cursor: pointer; }
+    .info-box.clicavel:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body class="app-body">
+
+  <main class="pagina-perfil">
+    <section class="perfil-banner">
+      <div class="overlay"></div>
+
+<div class="banner-acoes" id="bannerAcoes" style="display:none">
+  <label class="btn-perfil">🖼 Alterar banner<input type="file" id="inputBanner" accept="image/*" hidden></label>
+  <button class="btn-perfil" id="btnRemoverBanner" onclick="removerBanner()" style="display:none">✕ Remover</button>
+</div>
+
+      <div class="perfil-conteudo">
+
+        <!-- Foto -->
+        <div class="foto-perfil-wrapper" title="Clique para trocar a foto">
+          <input type="file" id="inputFoto" accept="image/*">
+          <img class="foto-perfil" id="fotoPerfil" src=""
+            alt="Foto do aluno">
+          <div class="foto-overlay-edit">
+            <span style="font-size:20px;">📷</span>
+            <span>Trocar foto</span>
+          </div>
+        </div>
+
+        <!-- Nome dinâmico -->
+        <h1 id="nomeUsuario"></h1>
+        <p class="turma" id="handleUsuario" style="margin-bottom:6px;"></p>
+
+        <!-- Badges -->
+        <div class="perfil-badges">
+          <span class="badge-verificado" id="badgeVerif">Aluno Verificado</span>
+          <span class="badge-turma" id="badgeTurma"> DS 2 · 2026</span>
+        </div>
+
+        <!-- Turma dinâmica -->
+        <p class="turma" id="turmaUsuario">...</p>
+
+        <!-- Bio -->
+        <div class="bio-wrapper">
+          <p class="bio" id="bioTexto">
+            Estudante, criativa e apaixonada por tecnologia, design e projetos escolares.
+          </p>
+          <textarea class="bio-edit-area" id="bioTextarea" placeholder="Escreva sua bio..."></textarea>
+          <div class="bio-acoes">
+            <button class="btn-perfil" id="btnEditarBio" onclick="editarBio()"> Editar bio</button>
+            <button class="btn-perfil primary-btn" id="btnSalvarBio" onclick="salvarBio()" style="display:none;"> Salvar</button>
+            <button class="btn-perfil" id="btnCancelarBio" onclick="cancelarBio()" style="display:none;">✕ Cancelar</button>
+            <button class="btn-perfil" onclick="copiarLink()"> Copiar link</button>
+            <button class="btn-perfil" onclick="compartilharPerfil()"> Compartilhar</button>
+          </div>
+        </div>
+
+        <!-- Info boxes -->
+        <div class="info-perfil">
+          <div class="info-box">
+            <strong id="views">248</strong>
+            <span>Visualizações</span>
+          </div>
+          <div class="info-box clicavel" onclick="abrirModal('seguidores')" title="Ver seguidores">
+            <strong id="totalSeguidores">34</strong>
+            <span>Seguidores</span>
+          </div>
+          <div class="info-box clicavel" onclick="abrirModal('seguindo')" title="Ver quem você segue">
+            <strong id="totalSeguindo">12</strong>
+            <span>Seguindo</span>
+          </div>
+          <div class="info-box">
+            <strong style="color:#4ade80;">● Online</strong>
+            <span>Status</span>
+          </div>
+          <div class="info-box">
+            <strong id="totalLinks">0</strong>
+            <span>Links</span>
+          </div>
+        </div>
+
+        <!-- Botão Seguir -->
+        <div class="seguir-section">
+          <button class="btn-seguir-perfil" id="btnSeguir" onclick="toggleSeguir()">+ Seguir</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section class="links-perfil" id="secaoLinks">
+      <h2>Meus Links</h2>
+      <div class="lista-links" id="listaLinksPerfil"></div>
+    </section>
+
+    <!-- Personalização -->
+    <section class="personalizacao">
+      <h2>Personalização</h2>
+      <p style="color:var(--text-muted);font-size:14px;">Escolha a paleta de cores do seu Loom. Só você vê esta opção.</p>
+      <div class="paletas" id="listaPaletas"></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>© 2026 Loom — Projeto escolar</p>
+  </footer>
+
+  <!-- MODAL SEGUIDORES / SEGUINDO -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal-box">
+      <h3 id="modalTitulo">Seguidores</h3>
+      <div id="modalLista"></div>
+      <button class="modal-fechar" onclick="fecharModal()">Fechar</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    let handlePerfil, ehMeu, usuarioPerfil, estouSeguindo = false;
+    loomPronto.then(carregarPerfil);
+
+    async function carregarPerfil() {
+      handlePerfil = slugUser(new URLSearchParams(location.search).get("u")) || meuUsuario();
+      ehMeu = handlePerfil === meuUsuario();
+      if (!ehMeu) await sb.rpc("registrar_visita", { p_username: handlePerfil });   /* conta 1 visita por dia */
+      usuarioPerfil = ehMeu ? EU : await buscarUsuario(handlePerfil);
+      if (!usuarioPerfil) { showToast("Perfil não encontrado.", "error"); setTimeout(() => location.href = "explorar.html", 800); return; }
+      const u = usuarioPerfil;
+
+      document.title = `Loom — ${u.nome}`;
+      document.getElementById("nomeUsuario").textContent = u.nome;
+      document.getElementById("handleUsuario").textContent = "@" + u.user;
+      document.getElementById("turmaUsuario").textContent = `${u.ano}º Ano • ${CURSOS[u.curso]} • AGV`;
+      document.getElementById("badgeTurma").textContent = `${u.curso} ${u.ano} · 2026`;
+      document.getElementById("views").textContent = u.views ?? "—";
+      document.getElementById("totalSeguidores").textContent = u.seguidores;
+      document.getElementById("totalSeguindo").textContent = u.seguindo;
+      document.getElementById("fotoPerfil").src = avatarUsuario(u);
+      document.getElementById("bioTexto").textContent = u.bio || (ehMeu ? "Escreva sua bio..." : `Aluno(a) de ${CURSOS[u.curso]}, ${u.ano}º ano.`);
+
+      if (!ehMeu) {
+        document.getElementById("btnEditarBio").style.display = "none";
+        document.querySelector(".foto-perfil-wrapper").style.pointerEvents = "none";
+        document.querySelector(".foto-overlay-edit").style.display = "none";
+        estouSeguindo = (await getSeguindoIds()).has(u.id);
+        atualizarBotaoSeguir();
+      }
+      document.querySelector(".seguir-section").style.display = ehMeu ? "none" : "flex";
+      document.querySelector(".personalizacao").style.display = ehMeu ? "" : "none";
+      document.getElementById("bannerAcoes").style.display = ehMeu ? "flex" : "none";
+      aplicarBanner(u.banner);
+
+      const bv = document.getElementById("badgeVerif");
+      bv.textContent = u.verificado ? "Aluno Verificado" : "⏳ Aguardando verificação";
+      bv.classList.toggle("pendente", !u.verificado);
+
+      const nl = await renderLinksEm(document.getElementById("listaLinksPerfil"), u.id, "link-card", true);
+      document.getElementById("totalLinks").textContent = nl;
+      document.getElementById("secaoLinks").style.display = (nl || ehMeu) ? "" : "none";
+      if (!nl) document.getElementById("listaLinksPerfil").innerHTML = '<p style="color:var(--text-muted)">Adicione seus links em Configurações.</p>';
+    }
+
+    /* ── TROCAR FOTO ── */
+    document.getElementById("inputFoto").addEventListener("change", async function () {
+      const arq = this.files[0]; this.value = "";
+      if (!arq || !ehMeu) return;
+      if (!arq.type.startsWith("image/")) { showToast("Escolha um arquivo de imagem.", "error"); return; }
+      try {
+        const blob = await reduzirParaBlob(arq, 512);
+        const { url } = await enviarImagem("avatars", "avatar.jpg", blob);
+        const novaUrl = url + "?v=" + Date.now();
+        if (!(await atualizarPerfil({ avatar_url: novaUrl }))) throw new Error("Falha ao salvar o perfil.");
+        EU.img = novaUrl;
+        document.getElementById("fotoPerfil").src = novaUrl;
+        initApp();
+        showToast("Foto atualizada!", "success");
+      } catch (e) { console.error(e); showToast(e.message || "Não foi possível enviar a foto.", "error"); }
+    });
+
+    /* ── BANNER DO PERFIL ── */
+    function aplicarBanner(src) {
+      const b = document.querySelector(".perfil-banner");
+      b.style.backgroundImage = src ? `url("${src}")` : "";
+      b.style.backgroundSize = src ? "cover" : "";
+      b.style.backgroundPosition = src ? "center" : "";
+      b.classList.toggle("tem-banner", !!src);
+      document.getElementById("btnRemoverBanner").style.display = src ? "" : "none";
+    }
+    document.getElementById("inputBanner").addEventListener("change", async function () {
+      const f = this.files[0]; this.value = "";
+      if (!f || !ehMeu) return;
+      if (!f.type.startsWith("image/")) { showToast("Escolha um arquivo de imagem.", "error"); return; }
+      try {
+        const blob = await reduzirParaBlob(f, 1400, 0.82);
+        const { url } = await enviarImagem("banners", "banner.jpg", blob);
+        const novaUrl = url + "?v=" + Date.now();
+        if (!(await atualizarPerfil({ banner_url: novaUrl }))) throw new Error("Falha ao salvar o perfil.");
+        EU.banner = novaUrl;
+        aplicarBanner(novaUrl);
+        showToast("Banner atualizado!", "success");
+      } catch (e) { console.error(e); showToast(e.message || "Não foi possível enviar o banner.", "error"); }
+    });
+    async function removerBanner() {
+      if (!(await atualizarPerfil({ banner_url: null }))) { showToast("Não foi possível remover.", "error"); return; }
+      sb.storage.from("banners").remove([`${EU.id}/banner.jpg`]);
+      EU.banner = "";
+      aplicarBanner("");
+      showToast("Banner removido.");
+    }
+
+    /* ── SEGUIR / DEIXAR DE SEGUIR ── */
+    function atualizarBotaoSeguir() {
+      const btn = document.getElementById("btnSeguir");
+      btn.textContent = estouSeguindo ? "Seguindo" : "+ Seguir";
+      btn.classList.toggle("seguindo", estouSeguindo);
+    }
+    async function toggleSeguir() {
+      const quer = !estouSeguindo;
+      const btn = document.getElementById("btnSeguir");
+      btn.disabled = true;
+      const ok = await alternarSeguir(usuarioPerfil.id, quer);
+      btn.disabled = false;
+      if (!ok) { showToast("Não foi possível concluir.", "error"); return; }
+      estouSeguindo = quer;
+      atualizarBotaoSeguir();
+      const total = document.getElementById("totalSeguidores");
+      total.textContent = Math.max(0, parseInt(total.textContent) + (quer ? 1 : -1));
+      showToast(quer ? "Você está seguindo este perfil!" : "Você deixou de seguir.", quer ? "success" : "");
+    }
+
+    /* ── MODAL SEGUIDORES / SEGUINDO (dados reais) ── */
+    async function abrirModal(tipo) {
+      const mostrar = tipo === "seguidores" ? "seguidor_id" : "seguido_id";   /* quem aparece na lista */
+      const filtro  = tipo === "seguidores" ? "seguido_id"  : "seguidor_id";  /* de quem estamos listando */
+      const { data, error } = await sb.from("follows")
+        .select(`p:profiles!${mostrar}(username, nome, curso, ano)`)
+        .eq(filtro, usuarioPerfil.id).order("created_at", { ascending: false });
+      if (error) { showToast("Não foi possível carregar a lista.", "error"); return; }
+      const lista = data.map(r => r.p);
+      document.getElementById("modalTitulo").textContent =
+        tipo === "seguidores" ? `Seguidores (${lista.length})` : `Seguindo (${lista.length})`;
+      document.getElementById("modalLista").innerHTML = lista.map(u => `
+        <div class="modal-user" onclick="location.href='perfil.html?u=${encodeURIComponent(u.username)}'">
+          <div class="modal-avatar">${esc(u.nome[0].toUpperCase())}</div>
+          <div>
+            <div class="modal-nome">${esc(u.nome)}</div>
+            <div class="modal-turma">${u.ano}º ${esc(u.curso)} — AGV</div>
+          </div>
+        </div>`).join("") || '<p style="color:var(--text-muted);font-size:14px">Ninguém por aqui ainda.</p>';
+      document.getElementById("modalBg").classList.add("open");
+    }
+    function fecharModal() { document.getElementById("modalBg").classList.remove("open"); }
+    document.getElementById("modalBg").addEventListener("click", function (e) { if (e.target === this) fecharModal(); });
+  </script>
+</body>
+</html>

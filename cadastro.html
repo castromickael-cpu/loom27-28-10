@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Cadastro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body" data-guest-only>
+
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="logo-icon">L</div>
+      </div>
+      <h1>Loom</h1>
+      <p>Crie sua conta escolar</p>
+
+      <form id="formCadastro" onsubmit="fazerCadastro(event)" novalidate>
+        <input type="text" id="nomeCadastro" placeholder="Seu nome completo *" required autocomplete="name">
+
+        <div class="campo-usuario">
+          <span>@</span>
+          <input type="text" id="usuarioCadastro" placeholder="escolha seu usuário *" maxlength="20" required autocomplete="off">
+        </div>
+        <small id="msgUsuario" class="msg-campo"></small>
+
+        <input type="email" id="emailCadastro" placeholder="E-mail escolar *" required autocomplete="email">
+
+        <select id="turmaCadastro" required>
+          <option value="">Selecione sua turma *</option>
+          <optgroup label="Desenvolvimento de Sistemas">
+            <option value="DS-1">1º Ano • DS</option><option value="DS-2">2º Ano • DS</option><option value="DS-3">3º Ano • DS</option>
+          </optgroup>
+          <optgroup label="Administração">
+            <option value="ADM-1">1º Ano • ADM</option><option value="ADM-2">2º Ano • ADM</option><option value="ADM-3">3º Ano • ADM</option>
+          </optgroup>
+          <optgroup label="Portos">
+            <option value="PRT-1">1º Ano • PORTOS</option><option value="PRT-2">2º Ano • PORTOS</option><option value="PRT-3">3º Ano • PORTOS</option>
+          </optgroup>
+          <optgroup label="Bioeconomia">
+            <option value="BIO-1">1º Ano • BIO</option><option value="BIO-2">2º Ano • BIO</option><option value="BIO-3">3º Ano • BIO</option>
+          </optgroup>
+        </select>
+
+        <input type="password" id="senhaCadastro" placeholder="Crie uma senha (mín. 6) *" required autocomplete="new-password">
+
+        <button type="submit">Criar conta</button>
+      </form>
+
+      <a href="login.html" class="link">Já tenho conta — Entrar</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

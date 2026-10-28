@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Início</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+
+  <main class="hero">
+    <section class="hero-texto">
+      <span class="tag"> Plataforma escolar</span>
+
+      <h1>Seu link na bio escolar,<br>tudo em um só lugar.</h1>
+
+      <p>
+        O Loom conecta alunos de forma segura e personalizada. Reúna suas redes, bio e links favoritos em uma única página.
+      </p>
+
+      <div class="botoes-hero">
+        <a href="perfil.html" class="btn principal">Ver Perfil</a>
+        <a href="explorar.html" class="btn secundario">Explorar Alunos</a>
+        <a href="feed.html" class="btn secundario">Ir para o Feed</a>
+      </div>
+    </section>
+
+    <section class="hero-card">
+      <div class="mini-perfil">
+        <img id="heroFoto" src="" alt="Foto do aluno">
+        <h2 id="heroNome"></h2>
+        <p id="heroTurma"></p>
+        <div class="status">
+          <span class="bolinha online"></span>
+          <span style="font-size:13px;color:var(--green);font-weight:600;">Online agora</span>
+        </div>
+      </div>
+
+      <div class="mini-links" id="heroLinks"></div>
+    </section>
+  </main>
+
+  <!-- PERFIS EM DESTAQUE -->
+  <section class="destaques-section">
+    <h2>Perfis em destaque</h2>
+    <p class="secao-sub">Os perfis mais visitados e mais seguidos da escola.</p>
+    <div class="destaques-tabs">
+      <button class="active" data-rank="views" onclick="renderDestaques('views')">Mais vistos</button>
+      <button data-rank="seguidores" onclick="renderDestaques('seguidores')">Mais seguidos</button>
+    </div>
+    <div class="destaques-grid" id="destaquesGrid"></div>
+    <a href="explorar.html" class="destaques-todos">Ver todos os perfis →</a>
+  </section>
+
+  <!-- AVISOS ESCOLARES -->
+  <section class="avisos-section">
+    <h2>Avisos Escolares</h2>
+    <p class="secao-sub">Fique por dentro das últimas informações da escola.</p>
+
+    <div class="avisos-grid">
+      <div class="aviso-card urgente">
+        <span class="aviso-badge badge-urgente">⚠ Urgente</span>
+        <div class="aviso-titulo">Entrega de documentos pendentes</div>
+        <div class="aviso-desc">Alunos com documentação incompleta devem regularizar na secretaria até sexta-feira.</div>
+        <div class="aviso-data">📅 até 06/06/2026</div>
+      </div>
+
+      <div class="aviso-card evento">
+        <span class="aviso-badge badge-evento"> Evento</span>
+        <div class="aviso-titulo">Semana da Tecnologia 2026</div>
+        <div class="aviso-desc">Apresentação de projetos escolares aberta à comunidade. Prepare sua apresentação!</div>
+        <div class="aviso-data">📅 09 a 13/06/2026</div>
+      </div>
+
+      <div class="aviso-card info">
+        <span class="aviso-badge badge-info"> Info</span>
+        <div class="aviso-titulo">Novas turmas de reforço disponíveis</div>
+        <div class="aviso-desc">Inscrições abertas para reforço de Matemática, Português e Programação. Vagas limitadas.</div>
+        <div class="aviso-data">📅 a partir de 02/06/2026</div>
+      </div>
+
+      <div class="aviso-card">
+        <span class="aviso-badge badge-normal"> Geral</span>
+        <div class="aviso-titulo">Reunião de pais e mestres</div>
+        <div class="aviso-desc">Boletim do 1º semestre será entregue presencialmente. Confirme presença com seu responsável.</div>
+        <div class="aviso-data">📅 20/06/2026 — 18h</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTOS / PROVAS -->
+  <section class="eventos-section">
+    <h2>Próximos Eventos</h2>
+    <p class="secao-sub">Provas, trabalhos e apresentações do mês.</p>
+
+    <div class="eventos-grid">
+      <div class="evento-card">
+        <div class="evento-header">
+          <span class="evento-tipo tipo-prova">Prova</span>
+          <span class="evento-data">05/06</span>
+        </div>
+        <div class="evento-body">
+          <div class="evento-titulo">Prova de Matemática</div>
+          <div class="evento-desc">Conteúdo: funções, geometria e probabilidade. 2º e 3º anos.</div>
+        </div>
+      </div>
+
+      <div class="evento-card">
+        <div class="evento-header">
+          <span class="evento-tipo tipo-trabalho">Trabalho</span>
+          <span class="evento-data">10/06</span>
+        </div>
+        <div class="evento-body">
+          <div class="evento-titulo">Entrega — Projeto de TI</div>
+          <div class="evento-desc">Entrega final do projeto semestral. Turmas DS e ADM.</div>
+        </div>
+      </div>
+
+      <div class="evento-card">
+        <div class="evento-header">
+          <span class="evento-tipo tipo-apresentacao">Apresentação</span>
+          <span class="evento-data">13/06</span>
+        </div>
+        <div class="evento-body">
+          <div class="evento-titulo">Semana da Tecnologia</div>
+          <div class="evento-desc">Apresentação dos projetos escolares para a comunidade.</div>
+        </div>
+      </div>
+
+      <div class="evento-card">
+        <div class="evento-header">
+          <span class="evento-tipo tipo-evento">Evento</span>
+          <span class="evento-data">20/06</span>
+        </div>
+        <div class="evento-body">
+          <div class="evento-titulo">Reunião de Pais</div>
+          <div class="evento-desc">Boletim do 1º semestre. Presença obrigatória dos responsáveis.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE O WRMLINK OFERECE -->
+  <section class="beneficios">
+    <h2>O que o Loom oferece?</h2>
+    <div class="grid-cards">
+      <div class="card">
+        <span class="card-icon"></span>
+        <h3>Perfil Personalizado</h3>
+        <p>Adicione nome, bio, turma, foto e estilo visual único para seu perfil.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"></span>
+        <h3>Hub de Links</h3>
+        <p>Reúna todas as suas redes sociais e links importantes em uma página só.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"></span>
+        <h3>Explorar Alunos</h3>
+        <p>Procure colegas por nome, ano ou turma para facilitar novas conexões.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"></span>
+        <h3>Visual Moderno</h3>
+        <p>Temas, modo claro/escuro, gradientes e efeitos para personalizar tudo.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <p>© 2026 Loom — Projeto escolar</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

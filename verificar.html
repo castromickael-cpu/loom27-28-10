@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Verificar conta</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .verificar{max-width:520px;margin:30px auto;text-align:center}
+    .verificar h1{font:800 26px var(--font-display);margin-bottom:10px}
+    .verificar p{color:var(--text-muted);font-size:14px;margin-bottom:22px}
+    .verificar input{width:100%;padding:16px;border-radius:16px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-primary);font:700 28px var(--font-display);letter-spacing:10px;text-align:center;outline:none}
+    .verificar input:focus{border-color:var(--accent)}
+    .verificar button{margin-top:14px;width:100%;padding:14px;border:none;border-radius:14px;background:var(--accent);color:#fff;font:700 15px var(--font-display);cursor:pointer}
+  </style>
+</head>
+<body class="app-body">
+  <section class="verificar">
+    <h1>Verificar conta</h1>
+
+    <div id="vPendente">
+      <p>Para confirmar que você é aluno(a) da instituição, o administrador envia um <strong>código de 6 dígitos</strong> para o seu e-mail. Digite o código abaixo.</p>
+      <input type="text" id="codigoVerif" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code" onkeydown="if(event.key==='Enter')confirmarCodigo()">
+      <button onclick="confirmarCodigo()">Confirmar código</button>
+    </div>
+
+    <div id="vOk" style="display:none">
+      <p>Sua conta já está verificada. Você pode postar e aparecer nos perfis em destaque.</p>
+      <a href="feed.html" class="btn principal" style="display:inline-block">Ir para o Feed</a>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    loomPronto.then(() => {
+      if (EU.verificado) {
+        document.getElementById("vPendente").style.display = "none";
+        document.getElementById("vOk").style.display = "block";
+      }
+    });
+    async function confirmarCodigo() {
+      const v = document.getElementById("codigoVerif").value.trim();
+      if (!/^\d{6}$/.test(v)) { showToast("Digite os 6 dígitos do código.", "error"); return; }
+      const r = await confirmarCodigoServidor(v);
+      const msgs = {
+        invalido: "Código incorreto.",
+        expirado: "Esse código expirou. Peça um novo ao administrador.",
+        bloqueado: "Muitas tentativas. Peça um novo código ao administrador.",
+        sem_codigo: "Ainda não há código para a sua conta. Aguarde o e-mail do administrador.",
+        erro: "Não foi possível verificar agora. Tente de novo.",
+      };
+      if (r !== "ok") { showToast(msgs[r] || msgs.erro, "error"); return; }
+      EU.verificado = true;
+      showToast("Conta verificada!", "success");
+      setTimeout(() => window.location.href = "feed.html", 900);
+    }
+  </script>
+</body>
+</html>

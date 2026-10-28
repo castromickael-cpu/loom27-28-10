@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Feed</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+<div class="ap-conteudo">
+    <div class="ap-top">
+      <input type="text" id="buscaFeed" placeholder="Buscar nas postagens..." oninput="aplicarFiltroFeed()">
+      <button class="ap-novo" onclick="document.getElementById('textoPostagem').focus()">＋ Nova postagem</button>
+    </div>
+
+    <h2>Turmas</h2>
+    <div class="ap-turmas">
+      <button class="ap-turma active" data-curso="" onclick="filtrarFeed('',this)"><i>★</i>Todas</button>
+      <button class="ap-turma" data-curso="DS" onclick="filtrarFeed('DS',this)"><i>DS</i>Sistemas</button>
+      <button class="ap-turma" data-curso="ADM" onclick="filtrarFeed('ADM',this)"><i>ADM</i>Administração</button>
+      <button class="ap-turma" data-curso="PRT" onclick="filtrarFeed('PRT',this)"><i>PRT</i>Portos</button>
+      <button class="ap-turma" data-curso="BIO" onclick="filtrarFeed('BIO',this)"><i>BIO</i>Bioeconomia</button>
+    </div>
+
+    <section class="criar-postagem">
+      <div class="criar-topo">
+        <img id="apFoto2" src="" alt="">
+        <div><h3 id="apNome2"></h3><span id="apTurma2"></span></div>
+      </div>
+      <textarea id="textoPostagem" placeholder="No que você está pensando?"></textarea>
+      <input type="file" id="imagemPostagem" accept="image/*">
+      <div class="acoes-postagem">
+        <button class="btn-limpar-post" onclick="limparPostagem()">🗑 Limpar</button>
+        <button class="btn-publicar" onclick="criarPostagem()">Publicar</button>
+      </div>
+    </section>
+
+    <h2>Feed</h2>
+    <section class="lista-postagens" id="listaPostagens"></section>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

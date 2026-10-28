@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Explorar</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+
+  <main class="pagina-explorar">
+    <section class="explorar-topo">
+      <h1>Explorar Alunos</h1>
+      <p>Busque colegas por nome, turma ou ano.</p>
+
+      <div class="filtros">
+        <input type="text" id="pesquisa" placeholder="Pesquisar por nome...">
+
+        <select id="filtroTurma">
+          <option value="">Todas as turmas</option>
+          <option value="DS">Desenvolvimento de Sistemas</option>
+          <option value="ADM">Administração</option>
+          <option value="PRT">Portos</option>
+          <option value="BIO">Bioeconomia</option>
+        </select>
+
+        <select id="filtroAno">
+          <option value="">Todos os anos</option>
+          <option value="1">1º Ano</option>
+          <option value="2">2º Ano</option>
+          <option value="3">3º Ano</option>
+        </select>
+
+        <button onclick="filtrarAlunos()">Buscar</button>
+      </div>
+    </section>
+
+    <p id="semResultados" style="display:none;text-align:center;color:var(--text-muted);padding:30px 0;font-size:16px;">
+      Nenhum aluno encontrado com esses filtros.
+    </p>
+
+    <section class="grid-alunos" id="listaAlunos"></section>
+  </main>
+
+  <footer class="rodape">
+    <p>© 2026 Loom — Projeto escolar</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

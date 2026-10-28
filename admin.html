@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Administração</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .adm{max-width:860px;margin:0 auto;padding:32px 20px}
+    .adm h1{font:800 26px var(--font-display);margin-bottom:6px}
+    .adm h2{font:700 18px var(--font-display);margin:28px 0 12px}
+    .adm .sub{color:var(--text-muted);font-size:14px}
+    .adm-box{display:flex;gap:10px;margin-top:22px;max-width:420px}
+    .adm input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font:15px var(--font-body)}
+    .adm button{padding:10px 16px;border:none;border-radius:12px;cursor:pointer;font:700 13px var(--font-body);background:var(--accent);color:#fff}
+    .adm button.sec{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+    .adm-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;margin-bottom:10px;border-radius:16px;background:var(--bg-secondary);border:1px solid var(--border)}
+    .adm-row .info{flex:1;min-width:200px}
+    .adm-row small{display:block;color:var(--text-muted)}
+    .vazio{color:var(--text-muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <main class="adm">
+    <h1>🛡 Verificação de alunos</h1>
+    <p class="sub">Confirme se cada cadastro é realmente aluno da instituição.</p>
+
+    <p id="aviso" class="sub" style="margin-top:22px">Carregando...</p>
+
+    <div id="painel" style="display:none">
+      <h2>✉️ Gerar código de verificação</h2>
+      <p class="sub">Confirme que a pessoa é aluno(a) da instituição, gere o código e envie por e-mail.</p>
+      <div class="adm-box" style="flex-direction:column;max-width:420px">
+        <input type="text" id="gUser" placeholder="@usuário do aluno" oninput="this.value=slugUser(this.value)">
+        <input type="email" id="gEmail" placeholder="E-mail do aluno">
+        <button onclick="gerar()">Gerar código</button>
+      </div>
+      <div id="resultado" class="adm-row" style="display:none;margin-top:16px">
+        <div class="info"><small>Código de</small><strong id="rUser"></strong>
+          <div id="rCodigo" style="font:800 30px var(--font-display);letter-spacing:6px;color:var(--accent)"></div></div>
+        <a id="rMail" href="#"><button>✉️ Enviar por e-mail</button></a>
+      </div>
+
+      <h2>⏳ Cadastros neste navegador</h2>
+      <div id="pendentes"></div>
+      <p class="sub" style="margin-top:24px"><a href="login.html" style="color:var(--accent)">← Voltar ao Loom</a></p>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    let PENDENTES = [];
+    loomPronto.then(() => {
+      const aviso = document.getElementById("aviso");
+      if (!EU) { aviso.innerHTML = 'Faça <a href="login.html" style="color:var(--accent)">login</a> com uma conta de administrador.'; return; }
+      if (!EU.is_admin) { aviso.textContent = "Acesso restrito a administradores."; return; }
+      aviso.style.display = "none";
+      document.getElementById("painel").style.display = "block";
+      render();
+    });
+    async function render() {
+      const { data, error } = await sb.rpc("admin_pendentes");
+      if (error) { showToast("Erro ao listar cadastros.", "error"); console.error(error.message); return; }
+      PENDENTES = data || [];
+      document.getElementById("pendentes").innerHTML = PENDENTES.map(u => `<div class="adm-row">
+        <div class="info"><strong>${esc(u.nome)}</strong> <span style="color:var(--accent)">@${esc(u.username)}</span>
+          <small>${esc(u.email || "")} • ${u.ano}º Ano • ${esc(u.curso)}${u.codigo_gerado ? " • código já gerado" : ""}</small></div>
+        <button class="sec" onclick="preencher('${esc(u.username)}')">Usar</button></div>`).join("")
+        || '<p class="vazio">Nenhum cadastro pendente.</p>';
+    }
+    function preencher(user) {
+      const u = PENDENTES.find(x => x.username === user);
+      document.getElementById("gUser").value = user;
+      document.getElementById("gEmail").value = u?.email || "";
+      gerar();
+    }
+    async function gerar() {
+      const user = slugUser(document.getElementById("gUser").value);
+      const email = document.getElementById("gEmail").value.trim();
+      if (!user) { showToast("Digite o @usuário do aluno.", "error"); return; }
+      const { data: cod, error } = await sb.rpc("gerar_codigo", { p_username: user });
+      if (error) { showToast(error.message, "error"); return; }
+      const nome = PENDENTES.find(x => x.username === user)?.nome || "aluno(a)";
+      const corpo = `Olá, ${nome}!\n\nSeu cadastro no Loom foi confirmado.\nSeu código de verificação é: ${cod}\n\nNo Loom, abra "Verificar conta" e digite o código. Ele vale por 7 dias.`;
+      document.getElementById("rUser").textContent = "@" + user;
+      document.getElementById("rCodigo").textContent = cod;
+      document.getElementById("rMail").href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Seu código de verificação do Loom")}&body=${encodeURIComponent(corpo)}`;
+      document.getElementById("resultado").style.display = "flex";
+      render();
+    }
+  </script>
+</body>
+</html>

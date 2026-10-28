@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Redefinir senha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-logo"><div class="logo-icon">L</div></div>
+      <h1>Loom</h1>
+      <p id="msg">Validando o link...</p>
+      <div id="form" style="display:none">
+        <input type="password" id="novaSenha" placeholder="Nova senha (mín. 6)" autocomplete="new-password" onkeydown="if(event.key==='Enter')salvar()">
+        <button onclick="salvar()">Salvar nova senha</button>
+      </div>
+      <a href="login.html" class="link">Voltar ao login</a>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    /* O link do e-mail abre esta página já com uma sessão temporária de recuperação. */
+    sb.auth.onAuthStateChange((evento) => {
+      if (evento === "PASSWORD_RECOVERY") {
+        document.getElementById("msg").textContent = "Digite sua nova senha";
+        document.getElementById("form").style.display = "block";
+      }
+    });
+    if (location.hash.includes("type=recovery")) {
+      document.getElementById("msg").textContent = "Digite sua nova senha";
+      document.getElementById("form").style.display = "block";
+    }
+    setTimeout(() => {
+      if (document.getElementById("form").style.display === "none")
+        document.getElementById("msg").textContent = "Link inválido ou expirado. Peça um novo em \"Esqueceu a senha?\".";
+    }, 3000);
+    async function salvar() {
+      const senha = document.getElementById("novaSenha").value;
+      if (senha.length < 6) { showToast("Senha muito curta!", "error"); return; }
+      const { error } = await sb.auth.updateUser({ password: senha });
+      if (error) { showToast(mensagemErroAuth(error), "error"); return; }
+      showToast("Senha alterada!", "success");
+      setTimeout(() => location.href = "inicio.html", 900);
+    }
+  </script>
+</body>
+</html>

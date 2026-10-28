@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body" data-guest-only>
+
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="logo-icon">L</div>
+      </div>
+      <h1>Loom</h1>
+      <p>Entre na sua conta escolar</p>
+
+      <input type="email" id="email" placeholder="E-mail escolar">
+      <input type="password" id="senha" placeholder="Senha" onkeydown="if(event.key==='Enter')fazerLogin()">
+
+      <button onclick="fazerLogin()">Entrar</button>
+
+      <a href="#" class="link" onclick="esqueciSenha(event)">Esqueceu a senha?</a>
+      <a href="cadastro.html" class="link">Criar conta</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
